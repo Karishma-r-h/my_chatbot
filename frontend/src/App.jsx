@@ -15,7 +15,7 @@ function App() {
     setInput('');
 
     // Send it to Django
-    const response = await fetch('http://192.168.31.87:8000/api/chat/message/', {
+    const response = await fetch('https://my-chatbot-eb6x.onrender.com/api/chat/message/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: input, history: messages }),
