@@ -26,10 +26,9 @@ def chat_view(request):
         model="gemini-3.6-flash",
         contents=gemini_contents,
         config=types.GenerateContentConfig(
+            system_instruction="You have live Google Search available as a tool. You DO have access to real-time information such as current weather, news, and events — always use the search tool to answer questions about anything current, instead of saying you lack real-time access.",
             tools=[types.Tool(google_search=types.GoogleSearch())]
         ),
     )
-
-    print("GROUNDING METADATA:", response.candidates[0].grounding_metadata)
 
     return Response({'reply': response.text})
