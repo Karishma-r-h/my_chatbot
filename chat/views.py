@@ -9,9 +9,8 @@ client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 @api_view(['POST'])
 def chat_view(request):
     user_message = request.data.get('message', '')
-    history = request.data.get('history', [])  # list of {sender, text}
+    history = request.data.get('history', [])
 
-    # Convert our history into the shape Gemini expects
     gemini_contents = []
     for msg in history:
         role = 'user' if msg['sender'] == 'user' else 'model'
@@ -19,7 +18,6 @@ def chat_view(request):
             types.Content(role=role, parts=[types.Part(text=msg['text'])])
         )
 
-    # Add the new message at the end
     gemini_contents.append(
         types.Content(role='user', parts=[types.Part(text=user_message)])
     )
@@ -27,6 +25,11 @@ def chat_view(request):
     response = client.models.generate_content(
         model="gemini-3.6-flash",
         contents=gemini_contents,
+        config=types.GenerateContentConfig(
+            tools=[types.Tool(google_search=types.GoogleSearch())]
+        ),
     )
+
+    print("GROUNDING METADATA:", response.candidates[0].grounding_metadata)
 
     return Response({'reply': response.text})
