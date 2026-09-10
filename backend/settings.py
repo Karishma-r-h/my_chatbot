@@ -133,4 +133,8 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://my-chatbot-neon-iota.vercel.app",
+    "http://localhost:5173",
+    "http://192.168.31.87:5173",
+]
